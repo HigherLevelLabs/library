@@ -1,0 +1,10 @@
+.full{
+    background-image: url("../img/bg.jpg");
+    background-repeat: no-repeat;
+    background-size:cover;
+}
+
+#bookstack{
+    float: left;
+    height: 400px;
+}

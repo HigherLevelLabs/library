@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/animate.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+
+
+    <title>BookKeep</title>
+
+
+
+</head>
+
+
+<body class="full">
+    
+<!--- NAVBAR top Start --->
+    <nav class="navbar navbar-inverse animated fadeInLeft">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">BookKeep</a>
+    </div>
+    <div>
+      <ul class="nav navbar-nav">
+        <li><a href="#">Home</a></li>
+        <li><a href="#"><span class="glyphicon glyphicon-search"></span> Search</a></li>
+        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"> Browse <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">By Title</a></li>
+            <li><a href="#">By Author</a></li>
+            <li><a href="#">By Rating</a></li>
+            <li><a href="#">By Availability</a></li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<!--- Nav End--->
+    
+    <div class="container">
+    <div style="margin-top:0px" class="col-sm-3">
+    <img class="img-responsive animated flipInY" src="img/ccs_logo.png">
+    <img class="img-responsive animated flipInY" src="img/book_stack.png">
+        </div>
+
+
+
+
+                <button class="btn btn-info" id="getbtn" onclick="GetInfo()">SHOW LIBRARY</button>
+
+                <button class="btn btn-info" id="putbtn" onclick="PutInfo()">PUT</button>
+
+                <button class="btn btn-info" id="postbtn" onclick="PostInfo()">POST</button>
+
+
+                <button class="btn btn-info" id="delbtn" onclick="DeleteInfo()">DELETE</button>
+
+                <div id="infoBox">
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <!--
+    <form class="form-horizontal" role="form">
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="email">Email:</label>
+            <div class="col-sm-10">
+                <input type="email" class="form-control" id="email" placeholder="Enter email">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="pwd">Password:</label>
+            <div class="col-sm-10">
+                <input type="password" class="form-control" id="pwd" placeholder="Enter password">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"> Remember me</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default">Submit</button>
+            </div>
+        </div>
+    </form>
+-->
+
+
+
+    <script>
+        var infoBox = $("#infoBox");
+
+        function MakePretty(data) {
+            var contents = "";
+
+            
+//Javascript to Display a book from the DB            
+            for (var i = 0; i < data.length; i++) {
+                contents += "<h1>" + data[i].name + "</h1>";
+                contents += "<p> By: " + data[i].author + "</p>";
+                contents += "<p> Synopsis: " + data[i].synopsis + "</p>";
+                contents += "<p> Rating: " + data[i].rating + "</p>";
+                
+                //if statement to display checked out status
+                if (data[i].status == "in"){
+                    
+                    console.log("status is in!");
+                    
+                    contents += '<button class="btn btn-success" onClick="CheckOut(this)" data-id="' + data[i]._id + '">CHECKOUT BOOK</button>';
+                }
+                else if (data[i].status == "out"){
+                    contents += "Checked Out - due date: " + data[i].checkOutDate;
+                }
+                else {contents += "Book availability missing"};
+                
+            }
+
+
+
+            return contents;
+
+        }
+
+        function GetInfo() {
+            $.get("/browse", function (data) {
+                infoBox.html(MakePretty(data.success));
+            });
+        }
+
+
+        function PostInfo() {
+            if ($("#userName").val() != "" && $("#userBio").val() != "") {
+                $.post("/lebowski", {
+                        id: $("#userID").val(),
+                        name: $("#userName").val(),
+                        bio: $("#userBio").val()
+
+                    },
+
+                    function (data) {
+                        infoBox.html(MakePretty(data.success));
+                    });
+            } else {
+                alert("Please fill in all of your data");
+            }
+        }
+
+
+        function CheckOut(that) {
+var bookID = that.getAttribute("data-id")
+console.log(bookID);
+            
+            $.ajax({
+                url: "/checkout",
+                type: 'POST',
+                data: {
+                    id: bookID,
+                    status: "out",
+                },
+                success: function(data) {                    infoBox.html(MakePretty(data.success));
+                }
+            });
+
+        }
+
+
+        function DeleteInfo() {
+
+            $.ajax({
+                url: "/lebowski",
+                type: 'DELETE',
+                data: {
+                    id: $("#userID").val(),
+                },
+
+                success: function (data) {
+                    infoBox.html(MakePretty(data.success));
+                }
+            });
+
+        }
+        
+
+    </script>
+
+</body>
+
+
+
+</html>
