@@ -10,7 +10,7 @@
                     closeDB();
                     return console.log(err);
                 }
-                FindAllInCollectionAsArray("library", function (data) {
+                FindAllInCollectionAsArray("adduser", function (data) {
                     callback(data);
                 });
             });

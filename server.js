@@ -85,18 +85,33 @@
             });
         });
     });
+	
+	server.get("/adduser",function(req,res){
+		fs.readFile("templates/adduser.html", function(err,data){
+			if(err){
+				console.log(err);
+				return res.send("DIDN'T WORK!");
+			}
+			res.send(data.toString());
+		});
+	});
 
     //ADD USER IS NOT WORKING YET
     server.post("/adduser", function (req, res) {
-        //update in the DB
+        var model = {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            email: req.body.email,
+            phone: req.body.phone,
+            password: req.body.pwd
+        };//update in the DB
 
         console.log("Add user Called");
 
 
-        mongoRepo.CreateCustomer("users", req.body.user_name, function (data) {
+        mongoRepo.CreateCustomer("users", model, function (data) {
 
 
-            console.log(req.body.user_name);
             res.json({
                 success: data,
                 failure: false
