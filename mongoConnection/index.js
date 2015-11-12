@@ -10,9 +10,7 @@
                     closeDB();
                     return console.log(err);
                 }
-
-                FindAllInCollectionAsArray("adduser", function (data) {
-
+                FindAllInCollectionAsArray("library", function (data) {
                     callback(data);
                 });
             });
@@ -154,10 +152,8 @@
     }
 
     dbRepo.CreateCustomer = CreateCustomer;
-
     
     dbRepo.CreateBook = CreateBook;
-
 
     dbRepo.FindCustomerByID = FindCustomerByID;
 
