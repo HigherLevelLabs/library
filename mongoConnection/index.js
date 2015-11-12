@@ -1,9 +1,55 @@
-(function (dbRepo, connector) {
-    
-    
-var ObjectId = require('mongodb').ObjectID;    
+(function (dbRepo, connector, mongodb) {
 
 
+    var ObjectId = mongodb.ObjectID;
+
+    var CreateCustomer = function (collectionName, customer, callback) {
+        connector.ConnectToDB(function (db, closeDB) {
+            db.collection(collectionName).insert(customer, function (err) {
+                if (err) {
+                    closeDB();
+                    return console.log(err);
+                }
+                FindAllInCollectionAsArray("library", function (data) {
+                    callback(data);
+                });
+            });
+        });
+    };
+
+
+    
+    //CREATE THE BOOK
+    var CreateBook = function (collectionName, model, callback) {
+        connector.ConnectToDB(function (db, closeDB) {
+            db.collection(collectionName).insert(customer, function (err) {
+                if (err) {
+                    closeDB();
+                    return console.log(err);
+                }
+                FindAllInCollectionAsArray("library", function (data) {
+                    callback(data);
+                });
+            });
+        });
+    };
+
+
+    var FindCustomerByID = function (collectionName, customer, callback) {
+        connector.ConnectToDB(function (db, closeDB) {
+            db.collection(collectionName).find({
+                customer: new ObjectID(customer)
+            }).toArray(
+                function (err, data) {
+                    if (err) {
+                        closeDB();
+                        return console.log(err);
+                    }
+                    callback(data);
+                    closeDB();
+                });
+        });
+    };
 
     var FindAllInCollectionAsArray = function (collectionName, callback) {
 
@@ -75,9 +121,10 @@ var ObjectId = require('mongodb').ObjectID;
                 }, [['_id', 'asc']],
 
                 {
-                    $set: {status: 'out'}
-                },
-                {},
+                    $set: {
+                        status: 'out'
+                    }
+                }, {},
                 function (err) {
 
                     db.collection(collectionName).find().toArray(function (err, data) {
@@ -104,6 +151,10 @@ var ObjectId = require('mongodb').ObjectID;
 
     }
 
+    dbRepo.CreateCustomer = CreateCustomer;
+
+    dbRepo.FindCustomerByID = FindCustomerByID;
+
     dbRepo.FindAllInCollectionAsArray = FindAllInCollectionAsArray;
 
     dbRepo.FindSingleCollectionByID = FindSingleCollectionByID;
@@ -112,6 +163,7 @@ var ObjectId = require('mongodb').ObjectID;
 
 })(
     module.exports,
-    require("./connector.js")
+    require("./connector.js"),
 
+    require("mongodb")
 );

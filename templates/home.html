@@ -22,58 +22,58 @@
 
 
 <body class="full">
-    
-<!--- NAVBAR top Start --->
+
+    <!--- NAVBAR top Start --->
     <nav class="navbar navbar-inverse animated fadeInLeft">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#">BookKeep</a>
-    </div>
-    <div>
-      <ul class="nav navbar-nav">
-        <li><a href="#">Home</a></li>
-        <li><a href="#"><span class="glyphicon glyphicon-search"></span> Search</a></li>
-        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"> Browse <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">By Title</a></li>
-            <li><a href="#">By Author</a></li>
-            <li><a href="#">By Rating</a></li>
-            <li><a href="#">By Availability</a></li>
-          </ul>
-        </li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
-<!--- Nav End--->
-    
-    <div class="container">
-    <div style="margin-top:0px" class="col-sm-3">
-    <img class="img-responsive animated flipInY" src="img/ccs_logo.png">
-    <img class="img-responsive animated flipInY" src="img/book_stack.png">
-        </div>
-
-
-
-
-                <button class="btn btn-info" id="getbtn" onclick="GetInfo()">SHOW LIBRARY</button>
-
-                <button class="btn btn-info" id="putbtn" onclick="PutInfo()">PUT</button>
-
-                <button class="btn btn-info" id="postbtn" onclick="PostInfo()">POST</button>
-
-
-                <button class="btn btn-info" id="delbtn" onclick="DeleteInfo()">DELETE</button>
-
-                <div id="infoBox">
-                </div>
-
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">BookKeep</a>
+            </div>
+            <div>
+                <ul class="nav navbar-nav">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-search"></span> Search</a></li>
+                    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"> Browse <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">By Title</a></li>
+                            <li><a href="#">By Author</a></li>
+                            <li><a href="#">By Rating</a></li>
+                            <li><a href="#">By Availability</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                </ul>
             </div>
         </div>
+    </nav>
+    <!--- Nav End--->
+
+    <div class="container">
+        <div style="margin-top:0px" class="col-sm-3">
+            <img class="img-responsive animated flipInY" src="img/ccs_logo.png">
+            <img class="img-responsive animated flipInY" src="img/book_stack.png">
+        </div>
+
+
+
+
+        <button class="btn btn-info" id="getbtn" onclick="GetInfo()">SHOW LIBRARY</button>
+
+        <button class="btn btn-info" id="putbtn" onclick="RenderCustomerForm()">ADD USER</button>
+
+        <button class="btn btn-info" id="postbtn" onclick="GetAddBook()">ADD BOOK</button>
+
+
+        <button class="btn btn-info" id="delbtn" onclick="DeleteInfo()">DELETE</button>
+
+        <div id="infoBox">
+        </div>
+
+    </div>
+    </div>
     </div>
 
 
@@ -119,27 +119,28 @@
         function MakePretty(data) {
             var contents = "";
 
-            
-//Javascript to Display a book from the DB            
+
+            //Javascript to Display a book from the DB            
             for (var i = 0; i < data.length; i++) {
                 contents += "<h1>" + data[i].name + "</h1>";
                 contents += "<p> By: " + data[i].author + "</p>";
                 contents += "<p> Synopsis: " + data[i].synopsis + "</p>";
                 contents += "<p> Rating: " + data[i].rating + "</p>";
-                
+
                 //if statement to display checked out status
-                if (data[i].status == "in"){
-                    
+                if (data[i].status == "in") {
+
                     console.log("status is in!");
-                    
+
                     contents += '<button class="btn btn-success" onClick="CheckOut(this)" data-id="' + data[i]._id + '">CHECKOUT BOOK</button>';
-                }
-                else if (data[i].status == "out"){
+                } else if (data[i].status == "out") {
                     contents += "Checked Out - due date: " + data[i].checkOutDate;
-                }
-                else {contents += "Book availability missing"};
-                
+                } else {
+                    contents += "Book availability missing"
+                };
+
             }
+
 
 
 
@@ -147,12 +148,48 @@
 
         }
 
+
+        function RenderCustomerForm() {
+
+            var contents = "";
+
+            //create HTML forms for customer data - replace with Kelly's forms later
+            contents += '<br /><form action="/adduser" method="POST"> <input type = "text" name = "user_name" placeholder = "username" / > <input type = "submit" name = "submit" value = "Create User!" / > </form>'
+
+            document.getElementById("infoBox").innerHTML = contents;
+
+        }
+
+
+
         function GetInfo() {
             $.get("/browse", function (data) {
                 infoBox.html(MakePretty(data.success));
             });
         }
 
+
+        function GetAddBook() {
+            $.get("/addBook", function (data) {
+                var contents = "";
+
+                contents += data;
+
+                document.getElementById("infoBox").innerHTML = contents;
+            });
+        }
+
+        function CreateBook() {
+            $.post("/addbook", {
+                    owner: $("#owner").val(),
+                    title: $("#title").val(),
+                    author: $("#author").val(),
+                    synopsis: $("#synopsis").val()
+                },
+                function (data) {
+                    infoBox.html(MakePretty(data.success));
+                });
+        }
 
         function PostInfo() {
             if ($("#userName").val() != "" && $("#userBio").val() != "") {
@@ -173,9 +210,9 @@
 
 
         function CheckOut(that) {
-var bookID = that.getAttribute("data-id")
-console.log(bookID);
-            
+            var bookID = that.getAttribute("data-id")
+            console.log(bookID);
+
             $.ajax({
                 url: "/checkout",
                 type: 'POST',
@@ -183,7 +220,8 @@ console.log(bookID);
                     id: bookID,
                     status: "out",
                 },
-                success: function(data) {                    infoBox.html(MakePretty(data.success));
+                success: function (data) {
+                    infoBox.html(MakePretty(data.success));
                 }
             });
 
@@ -205,8 +243,6 @@ console.log(bookID);
             });
 
         }
-        
-
     </script>
 
 </body>
