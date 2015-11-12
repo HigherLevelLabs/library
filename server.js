@@ -48,9 +48,60 @@
         //update in the DB
 
         mongoRepo.UpdateSingleCollectionByID("library", req.body.id, req.body.status, function (data) {
-            
-            
 
+
+
+            res.json({
+                success: data,
+                failure: false
+            });
+        });
+
+    });
+
+    server.get("/addbook", function (req, res) {
+        fs.readFile("templates/addbook.html", function (err, data) {
+            if (err) {
+                console.log(err);
+                return res.send("ICEBERG");
+            }
+            res.send(data.toString());
+        });
+    });
+
+    server.post("/addbook", function (req, res) {
+        var model = {
+            owner: req.body.owner,
+            title: req.body.title,
+            author: req.body.author,
+            synopsis: req.body.synopsis,
+            status: "in",
+        };
+        
+        
+        console.log("the req.body.name : " + req.body.title);
+        
+        console.log("the model is: " + JSON.stringify(model));
+
+        mongoRepo.CreateBook("library", model, function (data) {
+            res.json({
+                success: data,
+                failure: false
+            });
+        });
+    });
+
+    //ADD USER IS NOT WORKING YET
+    server.post("/adduser", function (req, res) {
+        //update in the DB
+
+        console.log("Add user Called");
+
+
+        mongoRepo.CreateCustomer("users", req.body.user_name, function (data) {
+
+
+            console.log(req.body.user_name);
             res.json({
                 success: data,
                 failure: false
@@ -98,7 +149,7 @@
 
 })(
     require("express"),
-    require("express")(), (process.env.PORT || 8080), (process.env.IP || 'localhost'),
+    require("express")(), (process.env.PORT || 8081), (process.env.IP || 'localhost'),
     require("body-parser"),
     require("fs"),
     require("./mongoConnection")
