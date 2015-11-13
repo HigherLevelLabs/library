@@ -46,8 +46,15 @@
 
     server.post("/checkout", function (req, res) {
         //update in the DB
+        
+        var model = {
+            id: req.body.id,
+            status: "out",
+            co_date: req.body.co_date,
+            due_date: req.body.due_date,
+        };
 
-        mongoRepo.UpdateSingleCollectionByID("library", req.body.id, req.body.status, function (data) {
+        mongoRepo.UpdateSingleCollectionByID("library", model, function (data) {
 
             res.json({
                 success: data,
@@ -57,6 +64,9 @@
 
     });
 
+    
+    
+    
     server.get("/addbook", function (req, res) {
         fs.readFile("templates/addbook.html", function (err, data) {
             if (err) {

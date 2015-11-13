@@ -113,18 +113,20 @@
         });
     }
 
-    var UpdateSingleCollectionByID = function (collectionName, id, status, callback) {
+    var UpdateSingleCollectionByID = function (collectionName, model, callback) {
 
 
         connector.ConnectToDB(function (db, closeDB) {
 
             db.collection(collectionName).findAndModify({
-                    _id: new ObjectId(id)
+                    _id: new ObjectId(model.id)
                 }, [['_id', 'asc']],
 
                 {
                     $set: {
-                        status: 'out'
+                         status: model.status,
+                         co_date: model.co_date,
+                         due_date: model.due_date,
                     }
                 }, {},
                 function (err) {

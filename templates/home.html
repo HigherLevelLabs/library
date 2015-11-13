@@ -59,7 +59,7 @@
 
 
 
-
+        <div class="col-sm-9">
         <button class="btn btn-info" id="getbtn" onclick="GetInfo()">SHOW LIBRARY</button>
 
         <button class="btn btn-info" id="putbtn" onclick="RenderCustomerForm()">ADD USER</button>
@@ -71,10 +71,10 @@
 
         <div id="infoBox">
         </div>
-
+            
     </div>
     </div>
-    </div>
+   
 
 
 
@@ -134,7 +134,7 @@
 
                     contents += '<button class="btn btn-success" onClick="CheckOut(this)" data-id="' + data[i]._id + '">CHECKOUT BOOK</button>';
                 } else if (data[i].status == "out") {
-                    contents += "Checked Out - due date: " + data[i].checkOutDate;
+                    contents += "Checked Out - due date: " + data[i].due_date;
                 } else {
                     contents += "Book availability missing"
                 };
@@ -210,8 +210,15 @@
 
 
         function CheckOut(that) {
-            var bookID = that.getAttribute("data-id")
+            var bookID = that.getAttribute("data-id");
             console.log(bookID);
+            
+            //date stuff
+            var currentDate= new Date();
+            var bookDue = new Date();
+            //current date plus 14 days (2 weeks)
+            var theDate = bookDue.setDate(bookDue.getDate()+14);
+            //I really don't know how the variables worked out this way, but it's accurate and works, even though it makes absolutely no sense below.
 
             $.ajax({
                 url: "/checkout",
@@ -219,6 +226,8 @@
                 data: {
                     id: bookID,
                     status: "out",
+                    co_date: currentDate,
+                    due_date: bookDue,
                 },
                 success: function (data) {
                     infoBox.html(MakePretty(data.success));
@@ -226,6 +235,7 @@
             });
 
         }
+        //this goes to server.js
 
 
         function DeleteInfo() {
