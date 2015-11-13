@@ -119,7 +119,11 @@
             title: req.body.title,
             author: req.body.author,
             synopsis: req.body.synopsis,
-            status: "in",
+            status: req.body.status,
+			rating: req.body.rating,
+			checkOutDate: req.body.checkOutDate,
+			dueDate: req.body.dueDate,
+			customer: req.body.customer
         };
         
         

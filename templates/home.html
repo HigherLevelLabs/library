@@ -150,13 +150,14 @@
 
 
         function RenderCustomerForm() {
+			  $.get("/adduser", function (data) {
+                var contents = "";
 
-            var contents = "";
+                contents += data;
 
-            //create HTML forms for customer data - replace with Kelly's forms later
-            contents += '<br /><form action="/adduser" method="POST"> <input type = "text" name = "user_name" placeholder = "username" / > <input type = "submit" name = "submit" value = "Create User!" / > </form>'
-
-            document.getElementById("infoBox").innerHTML = contents;
+                document.getElementById("infoBox").innerHTML = contents;
+            });
+        }
 
         }
 
@@ -184,7 +185,12 @@
                     owner: $("#owner").val(),
                     title: $("#title").val(),
                     author: $("#author").val(),
-                    synopsis: $("#synopsis").val()
+                    synopsis: $("#synopsis").val(),
+					status: $("#status").val(),
+					rating: $("#rating").val(),
+					checkOutDate: $("#checkOutDate").val(),
+					dueDate: $("#dueDate").val(),
+					customer: $("#customer").val()
                 },
                 function (data) {
                     infoBox.html(MakePretty(data.success));
