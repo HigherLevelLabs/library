@@ -44,6 +44,7 @@
 
 
 
+    //check out book
     server.post("/checkout", function (req, res) {
         //update in the DB
         
@@ -63,6 +64,29 @@
         });
 
     });
+    
+    
+    
+    
+    //check book back in
+    server.post("/return", function (req, res) {
+        //update in the DB
+        
+        var model = {
+            id: req.body.id,
+            status: "in",
+        };
+
+        mongoRepo.UpdateStatusByID("library", model, function (data) {
+
+            res.json({
+                success: data,
+                failure: false
+            });
+        });
+
+    });
+
 
     
     

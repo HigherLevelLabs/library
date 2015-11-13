@@ -24,7 +24,7 @@
 <body class="full">
 
     <!--- NAVBAR top Start --->
-    <nav class="navbar navbar-inverse animated fadeInLeft">
+    <nav class="navbar navbar-inverse animated fadeInRight">
         <div class="container-fluid">
             <div class="navbar-header">
                 <a class="navbar-brand" href="#">BookKeep</a>
@@ -53,7 +53,7 @@
 
     <div class="container">
         <div style="margin-top:0px" class="col-sm-3">
-            <img class="img-responsive animated flipInY" src="img/ccs_logo.png">
+            <img class="img-responsive animated rollIn" src="img/ccs_logo.png">
             <img class="img-responsive animated flipInY" src="img/book_stack.png">
         </div>
 
@@ -135,6 +135,7 @@
                     contents += '<button class="btn btn-success" onClick="CheckOut(this)" data-id="' + data[i]._id + '">CHECKOUT BOOK</button>';
                 } else if (data[i].status == "out") {
                     contents += "Checked Out - due date: " + data[i].due_date;
+                    contents += '<button class="btn btn-warning" onClick="CheckIn(this)" data-id="' + data[i]._id + '">RETURN BOOK</button>'
                 } else {
                     contents += "Book availability missing"
                 };
@@ -159,7 +160,7 @@
             });
         }
 
-        }
+        
 
 
 
@@ -243,6 +244,31 @@
         }
         //this goes to server.js
 
+        
+//Check-in begin
+        
+        function CheckIn(that) {
+            var bookID = that.getAttribute("data-id");
+            console.log(bookID);
+        
+
+            $.ajax({
+                url: "/return",
+                type: 'POST',
+                data: {
+                    id: bookID,
+                    status: "in",
+                },
+                success: function (data) {
+                    infoBox.html(MakePretty(data.success));
+                }
+            });
+
+        }
+        //this goes to server.js
+
+        
+        
 
         function DeleteInfo() {
 
