@@ -24,57 +24,69 @@
 <body class="full">
 
     <!--- NAVBAR top Start --->
-    <nav class="navbar navbar-inverse animated fadeInRight">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#">BookKeep</a>
-            </div>
-            <div>
-                <ul class="nav navbar-nav">
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#"><span class="glyphicon glyphicon-search"></span> Search</a></li>
-                    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"> Browse <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">By Title</a></li>
-                            <li><a href="#">By Author</a></li>
-                            <li><a href="#">By Rating</a></li>
-                            <li><a href="#">By Availability</a></li>
-                        </ul>
-                    </li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-                    <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <!--- Nav End--->
-
-    <div class="container">
-        <div style="margin-top:0px" class="col-sm-3">
-            <img class="img-responsive animated rollIn" src="img/ccs_logo.png">
-            <img class="img-responsive animated flipInY" src="img/book_stack.png">
-        </div>
-
-
-
-        <div class="col-sm-9">
-        <button class="btn btn-info" id="getbtn" onclick="GetInfo()">SHOW LIBRARY</button>
-
-        <button class="btn btn-info" id="putbtn" onclick="RenderCustomerForm()">ADD USER</button>
-
-        <button class="btn btn-info" id="postbtn" onclick="GetAddBook()">ADD BOOK</button>
-
-
-        <button class="btn btn-info" id="delbtn" onclick="DeleteInfo()">DELETE</button>
-
-        <div id="infoBox">
-        </div>
-            
+    <nav class="navbar navbar-default navbar-inverse" role="navigation">
+    <font face="serif">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <img src="img/ccs_logo.png" style="height:50px; width:50px; margin-right:10px;"/>
+                            
     </div>
-    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Library</a></li>
    
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Browse <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#">By Title</a></li>
+            <li><a href="#">By Author</a></li>
+             <li><a href="#">By Rating</a></li>
+           <li><a href="#">By Availability</a></li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">                                   
+          <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Login</b> <span class="caret"></span></a>
+			<ul id="login-dp" class="dropdown-menu">
+				<li>
+					 <div class="row">
+							<div class="col-md-12">
+								
+								 <form class="form" role="form" method="post" action="login" accept-charset="UTF-8" id="login-nav">
+										<div class="form-group">
+											 <label class="sr-only" for="exampleInputEmail2">Email address</label>
+											 <input type="email" class="form-control" id="exampleInputEmail2" placeholder="Email address" required>
+										</div>
+										<div class="form-group">
+											 <label class="sr-only" for="exampleInputPassword2">Password</label>
+											 <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password" required>
+                                            
+										</div>
+										<div class="form-group">
+											 <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+										</div>
+								
+								 </form>
+							</div>
+							
+					 </div>
+				</li>
+			</ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div>
+        </font>
+</nav>
 
 
 
