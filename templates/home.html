@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="css/animate.min.css">
     <link rel="stylesheet" href="css/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+    <!-- Call Bootstrap CDN -->
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
 
@@ -23,18 +25,29 @@
 
 <body class="full">
 
-    <!--- NAVBAR top Start --->
-    <nav class="navbar navbar-inverse animated fadeInLeft">
+
+    <!--- NAVBAR Start --->
+    <nav class="navbar navbar-default navbar-inverse" role="navigation">
         <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">BookKeep</a>
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <img src="img/ccs_logo.png" style="height:50px; width:50px; margin-right:10px;" />
+
             </div>
-            <div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#"><span class="glyphicon glyphicon-search"></span> Search</a></li>
-                    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"> Browse <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
+                    <li class="active"><a href="#">Library</a></li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Browse <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
                             <li><a href="#">By Title</a></li>
                             <li><a href="#">By Author</a></li>
                             <li><a href="#">By Rating</a></li>
@@ -43,13 +56,43 @@
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-                    <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Login</b> <span class="caret"></span></a>
+                        <ul id="login-dp" class="dropdown-menu">
+                            <li>
+                                <div class="row">
+                                    <div class="col-md-12">
+
+                                        <form class="form" role="form" method="post" action="login" accept-charset="UTF-8" id="login-nav">
+                                            <div class="form-group">
+                                                <label class="sr-only" for="exampleInputEmail2">Email address</label>
+                                                <input type="email" class="form-control" id="exampleInputEmail2" placeholder="Email address" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="sr-only" for="exampleInputPassword2">Password</label>
+                                                <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password" required>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+                                            </div>
+
+                                        </form>
+                                    </div>
+
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
+            <!-- /.navbar-collapse -->
         </div>
+
     </nav>
     <!--- Nav End--->
+
+
 
     <div class="container">
         <div style="margin-top:0px" class="col-sm-3">
@@ -58,23 +101,29 @@
         </div>
 
 
-
+        <!-- Navigation Buttons -->
         <div class="col-sm-9">
-        <button class="btn btn-info" id="getbtn" onclick="GetInfo()">SHOW LIBRARY</button>
+            <button class="btn btn-info" id="getbtn" onclick="GetInfo()">SHOW LIBRARY</button>
 
-        <button class="btn btn-info" id="putbtn" onclick="RenderCustomerForm()">ADD USER</button>
+            <button class="btn btn-info" id="putbtn" onclick="RenderCustomerForm()">ADD USER</button>
 
-        <button class="btn btn-info" id="postbtn" onclick="GetAddBook()">ADD BOOK</button>
+            <button class="btn btn-info" id="postbtn" onclick="GetAddBook()">ADD BOOK</button>
 
 
-        <button class="btn btn-info" id="delbtn" onclick="DeleteInfo()">DELETE</button>
+            <button class="btn btn-info" id="delbtn" onclick="DeleteInfo()">DELETE</button>
 
-        <div id="infoBox">
+            <!-- End Navigation Buttons -->
+
+
+            <!-- Container for main content stage -->
+            <div id="infoBox">
+            </div>
+
+            <!-- End Container for main content stage -->
+
         </div>
-            
     </div>
-    </div>
-   
+
 
 
 
@@ -148,9 +197,9 @@
 
         }
 
-
+        //add user functions
         function RenderCustomerForm() {
-			  $.get("/adduser", function (data) {
+            $.get("/adduser", function (data) {
                 var contents = "";
 
                 contents += data;
@@ -159,7 +208,67 @@
             });
         }
 
+        function AddUser() {
+            $.post("/adduser", {
+                    firstName: $("#firstName").val(),
+                    lastName: $("#lastName").val(),
+                    email: $("#email").val(),
+                    phone: $("#phone").val(),
+                    pwd: $("#pwd").val()
+                },
+                function (data) {
+                    console.log(data);
+                    infoBox.html(data.success);
+                    document.getElementById("infoBox").innerHTML = "<h3>User: " +
+                        data.success.firstName + " " + data.success.lastName + "</h3>";
+                });
         }
+
+
+        //end add user functions
+
+        //Login functions
+        function RenderLoginForm() {
+            $.get("/login", function (data) {
+                var contents = "";
+
+                contents += data;
+
+                document.getElementById("infoBox").innerHTML = contents;
+            });
+        }
+
+
+        function Login() {
+
+            var emailid = document.getElementById("email").value;
+            var passwordid = document.getElementById("pwd").value;
+
+            console.log("The email is: " + emailid + " and the password is " + passwordid);
+
+
+
+            $.ajax({
+                    url: "/login",
+                    type: 'POST',
+                    data: {
+                        email: emailid,
+                        password: passwordid,
+                    },
+                    success: function (data) {
+
+                        document.getElementById("infoBox").innerHTML = data;
+
+                    }
+
+                }
+
+            );
+        }
+
+        //End Login Functions        
+
+
 
 
 
@@ -186,11 +295,11 @@
                     title: $("#title").val(),
                     author: $("#author").val(),
                     synopsis: $("#synopsis").val(),
-					status: $("#status").val(),
-					rating: $("#rating").val(),
-					checkOutDate: $("#checkOutDate").val(),
-					dueDate: $("#dueDate").val(),
-					customer: $("#customer").val()
+                    status: $("#status").val(),
+                    rating: $("#rating").val(),
+                    checkOutDate: $("#checkOutDate").val(),
+                    dueDate: $("#dueDate").val(),
+                    customer: $("#customer").val()
                 },
                 function (data) {
                     infoBox.html(MakePretty(data.success));
@@ -215,15 +324,16 @@
         }
 
 
+
         function CheckOut(that) {
             var bookID = that.getAttribute("data-id");
             console.log(bookID);
-            
+
             //date stuff
-            var currentDate= new Date();
+            var currentDate = new Date();
             var bookDue = new Date();
             //current date plus 14 days (2 weeks)
-            var theDate = bookDue.setDate(bookDue.getDate()+14);
+            var theDate = bookDue.setDate(bookDue.getDate() + 14);
             //I really don't know how the variables worked out this way, but it's accurate and works, even though it makes absolutely no sense below.
 
             $.ajax({
