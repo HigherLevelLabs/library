@@ -70,7 +70,6 @@
         model.name = "DELETED";
         model.bio = "DELETED";
 
-<<<<<<< HEAD
         res.json({
             success: myData,
             failure: false
@@ -79,9 +78,6 @@
 
 
     //route performs a checkout on a library book
-=======
-    //check out book
->>>>>>> 0ed6108a158f802cb5b10c3e41e68bf2948b456a
     server.post("/checkout", function (req, res) {
         //update in the DB
 
