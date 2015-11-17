@@ -171,8 +171,52 @@
                 });
 
         });
+        
 
     }
+
+    
+    var UpdateStatusByID = function (collectionName, model, callback) {
+
+
+        connector.ConnectToDB(function (db, closeDB) {
+
+            db.collection(collectionName).findAndModify({
+                    _id: new ObjectId(model.id)
+                }, [['_id', 'asc']],
+
+                {
+                    $set: {
+                         status: model.status,
+                    }
+                }, {},
+                function (err) {
+
+                    db.collection(collectionName).find().toArray(function (err, data) {
+                        if (err) {
+                            closeDB();
+                            console.log(err);
+                        }
+
+                        console.log(" Connected correctly to Mongo Server ");
+
+                        callback(data);
+
+                        console.log(" Custom passed-in callback fired ");
+
+                        closeDB();
+
+                        console.log(" Closed correctly from Mongo Server ");
+
+                    });
+
+                });
+
+        });
+
+    }
+
+    
 
     
 //DB REPOS    
@@ -182,6 +226,8 @@
     dbRepo.FindAllInCollectionAsArray = FindAllInCollectionAsArray;
     dbRepo.FindSingleCollectionByID = FindSingleCollectionByID;
     dbRepo.UpdateSingleCollectionByID = UpdateSingleCollectionByID;
+    
+    dbRepo.UpdateStatusByID = UpdateStatusByID;
 
 })(
     module.exports,
